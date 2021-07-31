@@ -1,0 +1,32 @@
+service: bespokeDB
+
+frameworkVersion: '2'
+
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  lambdaHashingVersion: '20201221'
+
+functions:
+  ping:
+    handler: src/test.ping
+    events:
+      - http:
+          path: /ping
+          method: get
+
+resources:
+  Resources:
+    contactsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: contacts
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
